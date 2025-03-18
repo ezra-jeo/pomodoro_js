@@ -2,14 +2,18 @@ const express = require('express');
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    const cycle = req.query.cycle || 0;
+    if (req.session.cycle == null) {
+        req.session.cycle = 0;
+    }
+    else {
+        req.session.cycle++;
+    }
 
     res.render("rest", {
         layout: "index",
-        cycle: cycle
+        cycle: req.session.cycle
     });
-
-    console.log("Cycle: " + cycle);
+    console.log("Rest Cycle: " + req.session.cycle);
 });
 
 module.exports = router;

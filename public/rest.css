@@ -5,8 +5,9 @@ body {
 #timer-buttons button{
     all: unset;
     border: solid 2px #697565;
-    padding-left: 5%; 
-    padding-right: 5%;
+    width: 2rem;
+    padding-left: 1rem; 
+    padding-right: 1rem;
     border-radius: 10%;
     background-color: #3C3D37;
     color: #ECDFCC;

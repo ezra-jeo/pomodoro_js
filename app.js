@@ -1,5 +1,13 @@
 const express = require("express");
 const server = express();
+const session = require("express-session");
+
+server.use(session({
+    secret: "pomodoro123",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
 
 const bodyParser = require("body-parser");
 server.use(express.json());
@@ -13,13 +21,18 @@ server.engine("hbs", handlebars.engine({
 
 server.use(express.static("public"));
 
-
 const studyRoute = require("./routes/study.js");
 
 const restRoute = require("./routes/rest.js");
 
 server.use("/", studyRoute);
 server.use("/rest", restRoute);
+
+// Clear cycles in session
+server.get("/clear-cycle", (req, res) => {
+    req.session.cycle = null;
+    res.send({ cleared: true });
+});
 
 const port = process.env.PORT || 9090;
 server.listen(port, function(){
