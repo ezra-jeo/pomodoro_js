@@ -13,12 +13,13 @@ server.engine("hbs", handlebars.engine({
 
 server.use(express.static("public"));
 
-server.get("/", (req, resp) => {
-    resp.render("main", {
-        layout: "index",
-        title: "Pomodoro"
-    });
-});
+
+const studyRoute = require("./routes/study.js");
+
+const restRoute = require("./routes/rest.js");
+
+server.use("/", studyRoute);
+server.use("/rest", restRoute);
 
 const port = process.env.PORT || 9090;
 server.listen(port, function(){
