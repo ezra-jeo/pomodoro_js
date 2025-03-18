@@ -13,6 +13,13 @@ server.engine("hbs", handlebars.engine({
 
 server.use(express.static("public"));
 
+server.get("/", (req, resp) => {
+    resp.render("main", {
+        layout: "index",
+        title: "Pomodoro"
+    });
+});
+
 const port = process.env.PORT || 9090;
 server.listen(port, function(){
     console.log("Listening at port " + port);
