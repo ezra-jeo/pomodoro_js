@@ -17,8 +17,8 @@ body {
 } */
 
 .content-page {
-    display: grid;
-    grid-template-columns: 25% 75%;
+    display: flex;
+    justify-content: center;
     width: 100%;
     height: 100%;
 }

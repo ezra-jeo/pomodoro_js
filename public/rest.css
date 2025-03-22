@@ -3,12 +3,6 @@ body {
     color: #181C14;
 }
 #timer-buttons button{
-    all: unset;
-    border: solid 2px #697565;
-    padding-left: 5%; 
-    padding-right: 5%;
-    border-radius: 10%;
     background-color: #3C3D37;
     color: #ECDFCC;
-    cursor: pointer;
 }
