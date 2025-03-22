@@ -5,8 +5,12 @@
 <div class="content-section">
     <div id="timer" data-cycle="{{cycle}}">
         <h1>Rest Timer</h1>
-        <div id="rest-nums" class="timer-nums">
-            00:05:00
+        <div class="timer-nums">
+            <form id="rest-nums" class="timer-num-fields">
+                <div><input type="text" name="rest-hours" class="time-input" placeholder="00"/></div>:
+                <div><input type="text" name="rest-minutes" class="time-input" placeholder="05"/></div>:
+                <div><input type="text" name="rest-seconds" class="time-input" placeholder="00"/></div>
+            </form>
         </div>
         <div id="timer-buttons">
             <button id="start-rest" class="button-class">Start</button>

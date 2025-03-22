@@ -4,8 +4,12 @@
 <div class="content-section">
     <div id="timer" data-cycle="{{cycle}}">
         <h1>Study Timer</h1>
-        <div id="study-nums" class="timer-nums">
-            00:10:00
+        <div  class="timer-nums">
+            <form id="study-nums"  class="timer-num-fields">
+                <div><input type="text" name="study-hours" class="time-input" placeholder="00"/></div>:
+                <div><input type="text" name="study-minutes" class="time-input" placeholder="25"/></div>:
+                <div><input type="text" name="study-seconds" class="time-input" placeholder="00"/></div>
+            </form>
         </div>
         <div id="timer-buttons">
             <button id="start-study" class="button-class">Start</button>

@@ -24,3 +24,14 @@
     background-color: #697565;
     cursor: pointer;
 }
+.time-input {
+    all: unset;
+    cursor: text;
+    font-size: inherit;
+    width: 6rem;
+    text-align: center;
+}
+.timer-num-fields {
+    display: flex;
+    gap: 1rem;
+}
