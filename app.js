@@ -21,7 +21,13 @@ const restRoute = require("./routes/rest.js");
 server.use("/", studyRoute);
 server.use("/rest", restRoute);
 
-const port = process.env.PORT || 9090;
+// Clear cycles in session
+server.get("/clear-cycle", (req, res) => {
+    req.session.cycle = null;
+    res.send({ cleared: true });
+});
+
+const port = process.env.PORT || 3000;
 server.listen(port, function(){
     console.log("Listening at port " + port);
 });
