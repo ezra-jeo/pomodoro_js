@@ -3,15 +3,19 @@
 <link rel="stylesheet" href="rest.css" />
 
 <div class="content-section">
-    <h1>Rest Timer</h1>
     <div id="timer" data-cycle="{{cycle}}">
-        <div id="rest-nums" class="timer-nums">
-            00:05:00
+        <h1>Rest Timer</h1>
+        <div class="timer-nums">
+            <form id="rest-nums" class="timer-num-fields">
+                <div><input type="text" name="rest-hours" class="time-input" placeholder="00"/></div>:
+                <div><input type="text" name="rest-minutes" class="time-input" placeholder="05"/></div>:
+                <div><input type="text" name="rest-seconds" class="time-input" placeholder="00"/></div>
+            </form>
         </div>
         <div id="timer-buttons">
-            <button id="start-rest">Start</button>
-            <button id="stop-rest">Stop</buttton>
-            <button id="reset-rest">Reset</button>
+            <button id="start-rest" class="button-class">Start</button>
+            <button id="stop-rest" class="button-class">Stop</buttton>
+            <button id="reset-rest" class="button-class">Reset</button>
         </div>
     </div>
 </div>

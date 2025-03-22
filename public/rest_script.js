@@ -1,39 +1,49 @@
 let intervalId;
 let start = false;
 
-function pad(time) {
-    return ("0" + time).length > 2 ? time: "0" + time;
+function returnNums(name) {
+    return $(`#rest-nums input[name='${name}']`).val() != "" ? $(`#rest-nums input[name='${name}']`).val(): $(`#rest-nums input[name='${name}']`).attr("placeholder");
 }
 
 function restTimer() {
-    let time = $("#rest-nums").text().trim().split(":");
-    const timeInSec = Number(time[0])*3600 + Number(time[1])*60 + Number(time[2]);
-    
+    let hours = Number(returnNums("rest-hours"));
+    let minutes = Number(returnNums("rest-minutes"));
+    let seconds = Number(returnNums("rest-seconds"));
+
+    timeInSec = hours*3600 + minutes*60 + seconds;
+
     let cur_time = timeInSec;
 
     console.log(cur_time);
-
     function intervalBody() {
         let hr = Math.floor(cur_time / 3600); // Get hours
         let min = Math.floor((cur_time % 3600) / 60); // Get remaining minutes
         let sec = cur_time % 60; // Get remaining seconds
-    
-        $("#rest-nums").text(`${pad(hr)}:${pad(min)}:${pad(sec)}`);
-        cur_time--;
+        
+        $("#rest-nums input[name='rest-hours']").val(`${hr}`.padStart(2, "0"));
+        $("#rest-nums input[name='rest-minutes']").val(`${min}`.padStart(2, "0"));
+        $("#rest-nums input[name='rest-seconds']").val(`${sec}`.padStart(2, "0"));
+
+        cur_time--; // Decrement time
     
         if (cur_time <= 0) {
             clearInterval(intervalId);
-            $("#rest-nums").text("00:00:00");
+            
+            $("#rest-nums input").each(function() {
+                $(this).val("00");
+            });
+            
             setTimeout(function() {
                 location.replace(`/`); // Move to rest
                 console.log("Studying..."); 
             }, 1000);
+
             start = false;
         }
     }
 
     intervalBody(); // Preliminary run
-    intervalId = setInterval(intervalBody, 1000);
+    intervalId = setInterval(intervalBody, 10);
 }
 
 function runTimer() {
@@ -41,11 +51,15 @@ function runTimer() {
         start = true;
         restTimer();
         $("#start-rest").text("Pause");
+        $("#rest-nums input").each(function() {$(this).prop("readonly", true)});
+
         
     }
     else if (start) {
         stopTimer();
         $("#start-rest").text("Start");
+        $("#rest-nums input").each(function() {$(this).prop("readonly", false)});
+
     }
     else {
         console.log("Timer already started");
@@ -69,8 +83,11 @@ function clearTimer() {
     }
     $.get("/clear-cycle", function(res) {
         if (res.cleared) {
-            location.replace("/");
-            location.reload();
+            setTimeout(function() {
+                location.replace("/");
+                console.log("Studying..."); 
+            }, 1000);
+
         }
     }); 
 }
@@ -79,9 +96,11 @@ function resetTimer() {
     if (start) {
         stopTimer();
     }
-    $("#rest-nums").text("00:05:00");
-}
 
+    $("#rest-nums input").each(function() {
+        $(this).val("");
+    });
+}
 $(document).ready(function() {
     let cycle = $("#timer").data("cycle") || 0; 
     console.log("Cycle from data attribute:", cycle);

@@ -8,10 +8,19 @@ body {
     align-items: center;
     color: #ECDFCC;
     font-family: Poppins, Calibri;
+    padding: 0;
+    margin: 0 auto;
 }
 
-* {
+/* * {
     outline: solid white 1px;
+} */
+
+.content-page {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
 }
 
 .content-section {
@@ -20,4 +29,5 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
