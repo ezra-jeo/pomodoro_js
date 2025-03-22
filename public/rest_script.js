@@ -33,7 +33,7 @@ function restTimer() {
     }
 
     intervalBody(); // Preliminary run
-    intervalId = setInterval(intervalBody, 1000);
+    intervalId = setInterval(intervalBody, 10);
 }
 
 function runTimer() {
@@ -69,8 +69,11 @@ function clearTimer() {
     }
     $.get("/clear-cycle", function(res) {
         if (res.cleared) {
-            location.replace("/");
-            location.reload();
+            setTimeout(function() {
+                location.replace("/");
+                console.log("Studying..."); 
+            }, 1000);
+
         }
     }); 
 }

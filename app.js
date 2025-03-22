@@ -1,5 +1,13 @@
 const express = require("express");
 const server = express();
+const session = require("express-session");
+
+server.use(session({
+    secret: "pomodoro123",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
 
 const bodyParser = require("body-parser");
 server.use(express.json());
@@ -12,7 +20,6 @@ server.engine("hbs", handlebars.engine({
 }));
 
 server.use(express.static("public"));
-
 
 const studyRoute = require("./routes/study.js");
 

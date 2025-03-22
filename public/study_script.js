@@ -35,7 +35,7 @@ function studyTimer() {
     }
 
     intervalBody(); // Preliminary run
-    intervalId = setInterval(intervalBody, 1000);
+    intervalId = setInterval(intervalBody, 10);
 }
 function runTimer() {
     if (!start) {
