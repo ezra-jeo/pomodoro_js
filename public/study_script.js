@@ -1,5 +1,6 @@
 let intervalId;
 let start = false;
+let cycle = 0;
 
 function pad(time) {
     return ("0" + time).length > 2 ? time: "0" + time;
@@ -26,7 +27,7 @@ function studyTimer() {
             $("#study-nums").text("00:00:00");
 
             setTimeout(function() {
-                location.replace(`/rest`); // Move to rest
+                location.replace(`/rest?cycle=${cycle}`); // Move to rest
                 console.log("Resting..."); 
             }, 1000);
 
@@ -35,18 +36,12 @@ function studyTimer() {
     }
 
     intervalBody(); // Preliminary run
-    intervalId = setInterval(intervalBody, 1000);
+    intervalId = setInterval(intervalBody, 10);
 }
 function runTimer() {
     if (!start) {
         start = true;
         studyTimer();
-        $("#start-study").text("Pause");
-        
-    }
-    else if (start) {
-        stopTimer();
-        $("#start-study").text("Start");
     }
     else {
         console.log("Timer already started");
@@ -57,41 +52,29 @@ function stopTimer() {
     if (start) {
         start = false;
         clearInterval(intervalId);
-        $("#start-study").text("Start");
     }
     else {
         console.log("Timer not started");
     }
 }
 
-function clearTimer() {
-    if (start) {
-        stopTimer();
-    }
-    $.get("/clear-cycle", function(res) {
-        if (res.cleared) {
-            location.replace("/");
-            location.reload();
-        }
-    }); 
-}
-
 function resetTimer() {
     if (start) {
         stopTimer();
+        cycle = 0;
     }
 
     $("#study-nums").text("00:25:00");
 }
 
 $(document).ready(function() {
-    let cycle = $("#timer").data("cycle") || 0; 
-    console.log("Cycle from data attribute:", cycle);
+    const urlParams = new URLSearchParams(window.location.search);
+    cycle = Number(urlParams.get("cycle")) || 0;
 
     $("#start-study").click(runTimer);
     if (cycle > 0) {
         $("#start-study").click();
     }
-    $("#stop-study").click(clearTimer);
+    $("#pause-study").click(stopTimer);
     $("#reset-study").click(resetTimer);
 });
