@@ -14,7 +14,7 @@
     display: flex;
     justify-content: center;
 }
-#timer-buttons button{
+.button-class{
     all: unset;
     border: solid 2px #ECDFCC;
     width: 8vw;
