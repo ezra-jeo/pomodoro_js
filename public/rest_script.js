@@ -32,11 +32,14 @@ function restTimer() {
             $("#rest-nums input").each(function() {
                 $(this).val("00");
             });
-            
+
+            let alarm = new Audio("DLSU_BELL.mp3");
+            alarm.play();
+
             setTimeout(function() {
                 location.replace(`/`); // Move to rest
                 console.log("Studying..."); 
-            }, 1000);
+            }, 20000);
 
             start = false;
         }
@@ -52,14 +55,11 @@ function runTimer() {
         restTimer();
         $("#start-rest").text("Pause");
         $("#rest-nums input").each(function() {$(this).prop("readonly", true)});
-
-        
     }
     else if (start) {
         stopTimer();
         $("#start-rest").text("Start");
         $("#rest-nums input").each(function() {$(this).prop("readonly", false)});
-
     }
     else {
         console.log("Timer already started");

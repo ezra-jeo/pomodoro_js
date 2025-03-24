@@ -6,7 +6,9 @@ server.use(session({
     secret: "pomodoro123",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }
+    cookie: { 
+        secure: false 
+    }
 }));
 
 const bodyParser = require("body-parser");

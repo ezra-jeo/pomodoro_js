@@ -34,10 +34,13 @@ function studyTimer() {
                 $(this).val("00");
             });
             
+            let alarm = new Audio("DLSU_BELL.mp3");
+            alarm.play();
+
             setTimeout(function() {
                 location.replace(`/rest`); // Move to rest
                 console.log("Resting..."); 
-            }, 1000);
+            }, 20000);
 
             start = false;
         }
@@ -56,7 +59,6 @@ function runTimer() {
     else if (start) {
         stopTimer();
         $("#start-study").text("Start");
-        $("#study-nums input").each(function() {$(this).prop("readonly", false)});
 
     }
     else {
@@ -69,6 +71,7 @@ function stopTimer() {
         start = false;
         clearInterval(intervalId);
         $("#start-study").text("Start");
+        $("#study-nums input").each(function() {$(this).prop("readonly", false)});
     }
     else {
         console.log("Timer not started");
@@ -100,15 +103,14 @@ function resetTimer() {
 }
 
 $(document).ready(function() {
-
     $("#study-nums input").change(function() {
         $("#study-nums input").each(function() {
             if (!($(this).val() >= 0)) {
                 clearTimeFields();
             } 
         })
-    
     });
+
     let cycle = $("#timer").data("cycle") || 0; 
     console.log("Cycle from data attribute:", cycle);
 
