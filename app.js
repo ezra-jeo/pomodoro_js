@@ -36,7 +36,4 @@ server.get("/clear-cycle", (req, res) => {
     res.send({ cleared: true });
 });
 
-const port = process.env.PORT || 3000;
-server.listen(port, function(){
-    console.log("Listening at port " + port);
-});
+module.exports = server;
