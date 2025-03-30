@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
         req.session.cycle++;
     }
 
-    res.render("rest.hbs", {
+    res.render("rest", {
         layout: "index",
         cycle: req.session.cycle
     });

@@ -6,7 +6,7 @@ router.get("/", (req, res) => {
         req.session.cycle = 0;
     }
     
-    res.render("study.hbs", {
+    res.render("study", {
         layout: "index",
         title: "Pomodoro",
         cycle: req.session.cycle
