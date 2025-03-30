@@ -1,75 +1,82 @@
-let intervalId;
+
 let start = false;
+let startTime;
+let endTime;
+
+let timeLeft = null;
 
 
 function returnNums(name) {
     return $(`#study-nums input[name='${name}']`).val() != "" ? $(`#study-nums input[name='${name}']`).val(): $(`#study-nums input[name='${name}']`).attr("placeholder");
 }
 
-function studyTimer() {
-    let hours = Number(returnNums("study-hours"));
-    let minutes = Number(returnNums("study-minutes"));
-    let seconds = Number(returnNums("study-seconds"));
-
-    timeInSec = hours*3600 + minutes*60 + seconds;
-
-    let cur_time = timeInSec;
-
-    console.log(cur_time);
-    function intervalBody() {
-        let hr = Math.floor(cur_time / 3600); // Get hours
-        let min = Math.floor((cur_time % 3600) / 60); // Get remaining minutes
-        let sec = cur_time % 60; // Get remaining seconds
-        
-        $("#study-nums input[name='study-hours']").val(`${hr}`.padStart(2, "0"));
-        $("#study-nums input[name='study-minutes']").val(`${min}`.padStart(2, "0"));
-        $("#study-nums input[name='study-seconds']").val(`${sec}`.padStart(2, "0"));
-
-        cur_time--; // Decrement time
+function updateTimer() {
+    timeLeft = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
     
-        if (cur_time <= 0) {
-            clearInterval(intervalId);
-            
-            $("#study-nums input").each(function() {
-                $(this).val("00");
-            });
-            
-            let alarm = new Audio("DLSU_BELL.mp3");
-            alarm.play();
+    let hr = Math.floor(timeLeft / 3600); // Get hours
+    let min = Math.floor((timeLeft % 3600) / 60); // Get remaining minutes
+    let sec = timeLeft % 60; // Get remaining seconds
 
-            setTimeout(function() {
-                location.replace(`/rest`); // Move to rest
-                console.log("Resting..."); 
-            }, 20000);
+    $("#study-nums input[name='study-hours']").val(`${hr}`.padStart(2, "0"));
+    $("#study-nums input[name='study-minutes']").val(`${min}`.padStart(2, "0"));
+    $("#study-nums input[name='study-seconds']").val(`${sec}`.padStart(2, "0"));
 
-            start = false;
-        }
+    if (timeLeft > 0) {
+        if (start)
+            requestAnimationFrame(updateTimer);
+        else 
+            return "Paused";
     }
+    else {
+        $("#study-nums input").each(function() {
+            $(this).val("00");
+        });
+        
+        $("#timer-buttons button").each(function() {$(this).prop("disabled", true)});
 
-    intervalBody(); // Preliminary run
-    intervalId = setInterval(intervalBody, 10);
+        let alarm = new Audio("DLSU_BELL.mp3");
+        alarm.volume = 0.5;
+        alarm.play();
+
+        setTimeout(function() {
+            location.replace(`/rest`); // Move to rest
+            console.log("Resting..."); 
+        }, 20000);
+
+        start = false;
+    }
 }
+
 function runTimer() {
     if (!start) {
         start = true;
-        studyTimer();
         $("#start-study").text("Pause");
         $("#study-nums input").each(function() {$(this).prop("readonly", true)});
-    }
-    else if (start) {
-        stopTimer();
-        $("#start-study").text("Start");
 
+        let hours = Number(returnNums("study-hours"));
+        let minutes = Number(returnNums("study-minutes"));
+        let seconds = Number(returnNums("study-seconds"));
+
+        const timeInSec = hours*3600 + minutes*60 + seconds;
+
+        startTime = Date.now();
+        endTime = startTime + timeInSec * 1000;
+    
+        console.log(`Timer started at ${startTime} and end ${endTime} time sec ${timeInSec}`);
+    
+
+        requestAnimationFrame(updateTimer);
     }
     else {
         console.log("Timer already started");
     }
+
+    
 }
 
 function stopTimer() {
     if (start) {
         start = false;
-        clearInterval(intervalId);
         $("#start-study").text("Start");
         $("#study-nums input").each(function() {$(this).prop("readonly", false)});
     }
@@ -81,6 +88,7 @@ function stopTimer() {
 function clearTimer() {
     if (start) {
         stopTimer();
+        timeLeft = 0;
     }
     $.get("/clear-cycle", function(res) {
         if (res.cleared) {
@@ -89,6 +97,7 @@ function clearTimer() {
         }
     }); 
 }
+
 function clearTimeFields() {
     $("#study-nums input").each(function() {
         $(this).val("");
@@ -98,6 +107,7 @@ function clearTimeFields() {
 function resetTimer() {
     if (start) {
         stopTimer();
+        timeLeft = 0;
     }
     clearTimeFields();
 }
@@ -111,10 +121,19 @@ $(document).ready(function() {
         })
     });
 
+    $("#timer-buttons button").each(function() {$(this).prop("disabled", false)});
+
     let cycle = $("#timer").data("cycle") || 0; 
     console.log("Cycle from data attribute:", cycle);
 
-    $("#start-study").click(runTimer);
+    
+    $("#start-study").click(() => {
+        if (start)
+            stopTimer();
+        else
+            runTimer();
+    });
+
     if (cycle > 0) {
         $("#start-study").click();
     }
