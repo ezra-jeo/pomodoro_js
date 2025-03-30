@@ -28,7 +28,7 @@ const studyRoute = require("./routes/study.js");
 const restRoute = require("./routes/rest.js");
 
 server.use("/", studyRoute);
-server.use("/rest", restRoute);
+server.use("/rest.hbs", restRoute);
 
 // Clear cycles in session
 server.get("/clear-cycle", (req, res) => {
